@@ -1,0 +1,33 @@
+[{
+    "name": "eth1",
+    "config": {
+        "name": "eth1"
+    },
+    "state": {
+        "name": "eth1",
+        "InterfaceType": 2,
+        "mtu": 1518,
+        "loopback": 0,
+        "description": "25GbE Interface port",
+        "enabled": 1,
+        "IfIndex": 0,
+        "admin_status": 1,
+        "oper_status": 1
+    }
+}, {
+    "name": "eth2",
+    "config": {
+        "name": "eth2"
+    },
+    "state": {
+        "name": "eth2",
+        "InterfaceType": 2,
+        "mtu": 1518,
+        "loopback": 0,
+        "description": "25GbE Interface port",
+        "enabled": 1,
+        "IfIndex": 1,
+        "admin_status": 1,
+        "oper_status": 1
+    }
+}]

@@ -1,0 +1,12 @@
+[{
+    "name": "Simulated Bluefield-2",
+    "description": "Simulated Bluefield-2 P-Series SmartNIC 25GbE",
+    "id": "VIRTSIMDEV",
+    "manufacturing_name": "NVIDIA",
+    "manufacturing_date": "10272022",
+    "hardware_version": "Alpha",
+    "firmware_version": "ver 2",
+    "software_version": "20.04.5",
+    "serial_number": "MT2041X00573",
+    "part_number": "MBF2M332A-AENOT"
+}]
