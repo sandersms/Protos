@@ -11,7 +11,7 @@ option go_package = "github.com/opiproject/opi-api/common/v1/gen/go";
 // Service functions for the device inventory data
 service InventorySvc {
     // retrieves the inventory data for the device
-    rpc InventoryGet (Empty) returns (InventoryGetResponse) {}
+    rpc InventoryGet (InventoryGetRequest) returns (InventoryGetResponse) {}
 }
 
 enum APIStatus {
@@ -32,7 +32,9 @@ message DeviceInfo {
     string part_no = 10;
 }
 
-message Empty {}
+message InventoryGetRequest {
+    // Empty
+}
 
 message InventoryGetResponse {
     APIStatus status = 1;

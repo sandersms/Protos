@@ -56,6 +56,7 @@ class InventoryServicer(inventory_pb2_grpc.InventorySvcServicer):
 
     def InventoryGet(self, request, context):
         print("### Get the Device Inventory ###")
+        return inventory_pb2.InventoryGetResponse(APIStatus=API_STATUS_OK, DevInfo=dev_info)
 
 class NetInterfaceServicer(oc_interfaces_pb2_grpc.NetInterfaceServicer):
 
