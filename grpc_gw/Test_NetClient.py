@@ -51,6 +51,6 @@ def runClient():
         print("---- Update Interface ----")
         intf_UpdateInterface(stub)
 
-if '__name__' == '__main__':
+if __name__ == '__main__':
     logging.basicConfig()
     runClient()

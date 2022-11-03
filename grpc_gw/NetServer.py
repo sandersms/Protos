@@ -36,7 +36,7 @@ def read_device_info():
             devset = inventory_pb2.DeviceInfo(
                 Name=item["name"],
                 Description=item["description"],
-                id=item[id],
+                id=item["id"],
                 mfg_name=item["manufacturing_name"],
                 mfg_date=item["manufacturing_date"],
                 hw_version=item["hardware_version"],
@@ -46,17 +46,18 @@ def read_device_info():
                 part_no=item["part_number"]
             )
             dev_info.append(devset)
+            print(dev_info)
     return dev_info
 
 class InventoryServicer(inventory_pb2_grpc.InventorySvcServicer):
 
     def __init__(self):
         # Add Initialization Stuff
-        dev_data = read_device_info()
+        self.dev_data = read_device_info()
 
     def InventoryGet(self, request, context):
         print("### Received Get for the Device Inventory ###")
-        return inventory_pb2.InventoryGetResponse(APIStatus=API_STATUS_OK, DevInfo=dev_data)
+        return inventory_pb2.InventoryGetResponse(status=inventory_pb2.API_STATUS_OK, DevInfo=self.dev_data)
 
 class NetInterfaceServicer(oc_interfaces_pb2_grpc.NetInterfaceServicer):
 
@@ -78,7 +79,7 @@ class NetInterfaceServicer(oc_interfaces_pb2_grpc.NetInterfaceServicer):
 def AddNetServicertoserver(server):
     # Add the various servicer functions to the server
     oc_interfaces_pb2_grpc.add_NetInterfaceServicer_to_server(NetInterfaceServicer(), server)
-    inventory_pb2_grpc.add_InventorySvcServicer_to_server(InventoryServicer, server)
+    inventory_pb2_grpc.add_InventorySvcServicer_to_server(InventoryServicer(), server)
 
 def server():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=4))
