@@ -14,8 +14,8 @@ import inventory_pb2
 import inventory_pb2_grpc
 
 def get_DeviceInventory(stub):
-    response = stub.InventoryGet()
-    print("Get Device Inventory")
+    response = stub.InventoryGet(inventory_pb2.InventoryGetRequest())
+    print("Getting Device Inventory")
     for dev in response:
         print("Device Name", intf.name)
 

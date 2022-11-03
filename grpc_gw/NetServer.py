@@ -52,17 +52,17 @@ class InventoryServicer(inventory_pb2_grpc.InventorySvcServicer):
 
     def __init__(self):
         # Add Initialization Stuff
-        read_device_info()
+        dev_data = read_device_info()
 
     def InventoryGet(self, request, context):
-        print("### Get the Device Inventory ###")
-        return inventory_pb2.InventoryGetResponse(APIStatus=API_STATUS_OK, DevInfo=dev_info)
+        print("### Received Get for the Device Inventory ###")
+        return inventory_pb2.InventoryGetResponse(APIStatus=API_STATUS_OK, DevInfo=dev_data)
 
 class NetInterfaceServicer(oc_interfaces_pb2_grpc.NetInterfaceServicer):
 
     def __init__(self):
         # Add initialization stuff
-        read_interface_info()
+        if_data = read_interface_info()
     
     def NetInterfaceGet(self, request, context):
         print("### Get Interface ###")

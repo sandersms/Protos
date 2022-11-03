@@ -31,7 +31,7 @@ class DeviceInfo(_message.Message):
     sw_version: str
     def __init__(self, Name: _Optional[str] = ..., Description: _Optional[str] = ..., id: _Optional[str] = ..., mfg_name: _Optional[str] = ..., mfg_date: _Optional[str] = ..., hw_version: _Optional[str] = ..., fw_version: _Optional[str] = ..., sw_version: _Optional[str] = ..., serial_no: _Optional[str] = ..., part_no: _Optional[str] = ...) -> None: ...
 
-class Empty(_message.Message):
+class InventoryGetRequest(_message.Message):
     __slots__ = []
     def __init__(self) -> None: ...
 
