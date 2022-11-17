@@ -15,9 +15,11 @@ import inventory_pb2_grpc
 
 def get_DeviceInventory(stub):
     response = stub.InventoryGet(inventory_pb2.InventoryGetRequest())
-    print("Getting Device Inventory")
-    for dev in response:
-        print("Device Name", intf.name)
+    if response.status is inventory_pb2.API_STATUS_OK:
+        print("Received Device Inventory")
+        print(response.DevInfo)
+    else:
+        print("Error in Device Inventory Request")
 
 def intf_UpdateInterface(stub):
     print("****** Not Implemented Yet ******")
@@ -27,8 +29,8 @@ def intf_GetInterface(stub):
 
 def intf_listInterfaces(stub):
     # The list request is empty, so the response is the return of the request
-    response = stub.NetInterfaceListRequest()
-    print("Getting Interfaces List")
+    response = stub.NetInterfaceList(oc_interfaces_pb2.NetInterfaceListRequest())
+    print("Received Interfaces List Response")
     for intf in response:
         print("Interface Name:", intf.name)
 

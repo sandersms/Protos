@@ -20,12 +20,28 @@ def read_interface_info():
     # read the interface information and populate the network interface settings
     interface_list = []
     with open("interface_info.json") as interface_info:
-        for item in json.load(interface_info):
+        if_data = json.load(interface_info)
+        for item in if_data:
             setting = oc_interfaces_pb2.Interface(
-                name=item["name"]
-            #    config=
+                name=item["name"],
+                config = oc_interfaces_pb2.Config(
+                    name=item["config"]["name"]
+                ),
+                state = oc_interfaces_pb2.State(
+                    name=item["state"]["name"],
+                    type=item["state"]["InterfaceType"],
+                    mtu=item["state"]["mtu"],
+                    loopback_mode=item["state"]["loopback"],
+                    description=item["state"]["description"],
+                    enabled=item["state"]["enabled"],
+                    ifindex=item["state"]["IfIndex"],
+                    admin_status=item["state"]["admin_status"],
+                    oper_status=item["state"]["oper_status"]
+                )
             )
+
             interface_list.append(setting)
+            print(interface_list)
     return interface_list
 
 def read_device_info():
@@ -57,7 +73,21 @@ class InventoryServicer(inventory_pb2_grpc.InventorySvcServicer):
 
     def InventoryGet(self, request, context):
         print("### Received Get for the Device Inventory ###")
-        return inventory_pb2.InventoryGetResponse(status=inventory_pb2.API_STATUS_OK, DevInfo=self.dev_data)
+        with open("device_info.json") as device_data:
+            for device in json.load(device_data):
+                info = inventory_pb2.DeviceInfo(
+                    Name=device["name"],
+                    Description=device["description"],
+                    id=device["id"],
+                    mfg_name=device["manufacturing_name"],
+                    mfg_date=device["manufacturing_date"],
+                     hw_version=device["hardware_version"],
+                    fw_version=device["firmware_version"],
+                    sw_version=device["software_version"],
+                    serial_no=device["serial_number"],
+                    part_no=device["part_number"]
+            )
+        return inventory_pb2.InventoryGetResponse(status=inventory_pb2.API_STATUS_OK, DevInfo=info)
 
 class NetInterfaceServicer(oc_interfaces_pb2_grpc.NetInterfaceServicer):
 
@@ -69,7 +99,7 @@ class NetInterfaceServicer(oc_interfaces_pb2_grpc.NetInterfaceServicer):
         print("### Get Interface ###")
 
     def NetInterfaceList(self, request, context):
-        print("### List Interfaces ###")
+        print("### List Interfaces Request ###")
         listResponse = oc_interfaces_pb2.NetInterfaceListResponse()
         return listResponse
 
