@@ -14,14 +14,9 @@ service InventorySvc {
     rpc InventoryGet (InventoryGetRequest) returns (InventoryGetResponse) {}
 }
 
-enum APIStatus {
-    API_STATUS_OK = 0;
-    API_STATUS_ERROR = 1;
-}
-
 message DeviceInfo {
-    string Name = 1;
-    string Description = 2;
+    string name = 1;
+    string description = 2;
     string id = 3;
     string mfg_name = 4;
     string mfg_date = 5;
@@ -37,6 +32,5 @@ message InventoryGetRequest {
 }
 
 message InventoryGetResponse {
-    APIStatus status = 1;
-    DeviceInfo DevInfo = 2;
+    DeviceInfo devinfo = 1;
 }
