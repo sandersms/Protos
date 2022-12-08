@@ -13,6 +13,8 @@ service NetInterface {
     rpc NetInterfaceList (NetInterfaceListRequest) returns (NetInterfaceListResponse) {}
     // A method for setting or changing configuration of an interface
     rpc NetInterfaceUpdate (NetInterfaceUpdateRequest) returns (NetInterfaceUpdateResponse) {}
+    // Create an interface (virtual) for use
+    // Delete an interface that was created (a physical interface will fail to be deleted)
 }
 
 // Data Types

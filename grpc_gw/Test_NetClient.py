@@ -15,9 +15,9 @@ import inventory_pb2_grpc
 
 def get_DeviceInventory(stub):
     response = stub.InventoryGet(inventory_pb2.InventoryGetRequest())
-    if response.status is inventory_pb2.API_STATUS_OK:
+    if response:
         print("Received Device Inventory")
-        print(response.DevInfo)
+        print(response.devinfo)
     else:
         print("Error in Device Inventory Request")
 

@@ -76,24 +76,24 @@ class InventoryServicer(inventory_pb2_grpc.InventorySvcServicer):
         with open("device_info.json") as device_data:
             for device in json.load(device_data):
                 info = inventory_pb2.DeviceInfo(
-                    Name=device["name"],
-                    Description=device["description"],
+                    name=device["name"],
+                    description=device["description"],
                     id=device["id"],
                     mfg_name=device["manufacturing_name"],
                     mfg_date=device["manufacturing_date"],
-                     hw_version=device["hardware_version"],
+                    hw_version=device["hardware_version"],
                     fw_version=device["firmware_version"],
                     sw_version=device["software_version"],
                     serial_no=device["serial_number"],
                     part_no=device["part_number"]
             )
-        return inventory_pb2.InventoryGetResponse(status=inventory_pb2.API_STATUS_OK, DevInfo=info)
+        return inventory_pb2.InventoryGetResponse(devinfo=info)
 
 class NetInterfaceServicer(oc_interfaces_pb2_grpc.NetInterfaceServicer):
 
     def __init__(self):
         # Add initialization stuff
-        if_data = read_interface_info()
+        self.if_data = read_interface_info()
     
     def NetInterfaceGet(self, request, context):
         print("### Get Interface ###")
