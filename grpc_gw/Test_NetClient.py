@@ -38,7 +38,7 @@ def runClient():
     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
     # used in circumstances in which the with statement does not fit the needs
     # of the code.
-    print("Will try to get the Interfaces ...")
+    print("Will try to get the Device data ...")
     with grpc.insecure_channel('localhost:50051') as channel:
         # Get the inventory data first
         stub = inventory_pb2_grpc.InventorySvcStub(channel)

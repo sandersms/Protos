@@ -50,8 +50,8 @@ def read_device_info():
     with open("device_info.json") as dev_data:
         for item in json.load(dev_data):
             devset = inventory_pb2.DeviceInfo(
-                Name=item["name"],
-                Description=item["description"],
+                name=item["name"],
+                description=item["description"],
                 id=item["id"],
                 mfg_name=item["manufacturing_name"],
                 mfg_date=item["manufacturing_date"],
