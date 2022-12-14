@@ -2,35 +2,73 @@
 // Copyright (c)
 // protobuf specification for inventory object
 // inventory.proto file
+// (-- api-linter: core::0123::resource-annotation=disabled
+//     aip.dev/not-precedent: Currently not supporting resource annotation)
 
 syntax = "proto3";
 
-package opi_api.inventory.v1;
+package opi_api.common.v1;
+
+option java_package = "opi_api.common.v1";
+option java_multiple_files = true;
+option java_outer_classname = "InventoryProto";
+
 option go_package = "github.com/opiproject/opi-api/common/v1/gen/go";
+
+import "google/api/client.proto";
+import "google/api/resource.proto";
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
 
 // Service functions for the device inventory data
 service InventorySvc {
     // retrieves the inventory data for the device
-    rpc InventoryGet (InventoryGetRequest) returns (InventoryGetResponse) {}
+    rpc GetInventory (GetInventoryRequest) returns (Inventory) {
+        option (google.api.http) = {
+            get: "/v1/{name=inventory/*/inventory/*}"
+        };
+        option (google.api.method_signature) = "name";
+    }
 }
 
+// Device Information for the inventory
+// (-- api-linter: core::0142::time-field-type=disabled
+//     api.dev/not-precedent: We need to do this because mfg_date is a
+//     inventory parameter being reported by the device )
 message DeviceInfo {
+    // Device name string
     string name = 1;
+    // Device description data
     string description = 2;
+    // Device identifier string
     string id = 3;
-    string mfg_name = 4;
+    // Device manufacturer name
+    string mfgname = 4;
+    // Device manufacturing date
     string mfg_date = 5;
+    // Device hardware version
     string hw_version = 6;
+    // Device firmware version
     string fw_version = 7;
+    // Device software version
     string sw_version = 8;
+    // Serial number of the device
     string serial_no = 9;
+    // Part number information
     string part_no = 10;
 }
 
-message InventoryGetRequest {
-    // Empty
+// Request message for retrieving the Inventory data from the device
+message GetInventoryRequest {
+    // The name of the inventory to retrieve - blank for the full inventory
+    string name = 1 [
+        (google.api.field_behavior) = REQUIRED,
+        (google.api.resource_reference).type = "opi_api.common.v1/Inventory"
+    ];
 }
 
-message InventoryGetResponse {
+// Response inventory data information
+message Inventory {
+    // Device information portion of the inventory data
     DeviceInfo devinfo = 1;
 }
