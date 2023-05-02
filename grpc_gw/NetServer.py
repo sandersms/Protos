@@ -8,8 +8,11 @@ from concurrent import futures
 import logging
 
 import json
+import psutil
 
 import grpc
+
+import devinventory
 import oc_interfaces_pb2
 import oc_interfaces_pb2_grpc
 import inventory_pb2
@@ -19,29 +22,35 @@ import inventory_pb2_grpc
 def read_interface_info():
     # read the interface information and populate the network interface settings
     interface_list = []
-    with open("interface_info.json") as interface_info:
-        if_data = json.load(interface_info)
-        for item in if_data:
-            setting = oc_interfaces_pb2.Interface(
-                name=item["name"],
-                config = oc_interfaces_pb2.Config(
-                    name=item["config"]["name"]
-                ),
-                state = oc_interfaces_pb2.State(
-                    name=item["state"]["name"],
-                    type=item["state"]["InterfaceType"],
-                    mtu=item["state"]["mtu"],
-                    loopback_mode=item["state"]["loopback"],
-                    description=item["state"]["description"],
-                    enabled=item["state"]["enabled"],
-                    ifindex=item["state"]["IfIndex"],
-                    admin_status=item["state"]["admin_status"],
-                    oper_status=item["state"]["oper_status"]
-                )
+    for intf, if_info in psutil.net_if_stats().items():
+        ifset = oc_interfaces_pb2.Interface(
+            name=intf,
+            config=oc_interfaces_pb2.Config(
+                name=intf
+            ),
+            state = oc_interfaces_pb2.State(
+            name=intf,
+            type=0,
+            mtu=if_info.mtu,
+            loopback_mode=0,
+            description=intf,
+            enabled=1,
+            ifindex=0,
+            admin_status=1,
+            oper_status= (1 if if_info.isup else 0)
             )
+        )
+        interface_list.append(ifset)
+#        print("mtu=%s, oper state=%s, speed=%s" % (if_info.mtu,
+#              "up" if if_info.isup else "down", if_info.speed))
+    for entry in interface_list:
+        print(entry.state.name)
+        print("type=%s, mtu=%s, loopback=%s, enabled=%s, admin status=%s, oper status=%s" % (
+                "?" if entry.state.type else "Ethernet", entry.state.mtu,
+                "yes" if entry.state.loopback_mode else "no",
+                "yes" if entry.state.enabled else "no", "up" if entry.state.admin_status else "down",
+                "up" if entry.state.oper_status else "down"))
 
-            interface_list.append(setting)
-            print(interface_list)
     return interface_list
 
 def read_device_info():
@@ -53,7 +62,7 @@ def read_device_info():
                 name=item["name"],
                 description=item["description"],
                 id=item["id"],
-                mfg_name=item["manufacturing_name"],
+                mfgname=item["manufacturing_name"],
                 mfg_date=item["manufacturing_date"],
                 hw_version=item["hardware_version"],
                 fw_version=item["firmware_version"],
@@ -65,29 +74,29 @@ def read_device_info():
             print(dev_info)
     return dev_info
 
-class InventoryServicer(inventory_pb2_grpc.InventorySvcServicer):
+class InventoryServicer(inventory_pb2_grpc.InventorySvc):
 
     def __init__(self):
         # Add Initialization Stuff
-        self.dev_data = read_device_info()
+        self.inv_data = devinventory.gather_device_info()
 
-    def InventoryGet(self, request, context):
+    def GetInventory(self, request, context):
         print("### Received Get for the Device Inventory ###")
-        with open("device_info.json") as device_data:
-            for device in json.load(device_data):
-                info = inventory_pb2.DeviceInfo(
-                    name=device["name"],
-                    description=device["description"],
-                    id=device["id"],
-                    mfg_name=device["manufacturing_name"],
-                    mfg_date=device["manufacturing_date"],
-                    hw_version=device["hardware_version"],
-                    fw_version=device["firmware_version"],
-                    sw_version=device["software_version"],
-                    serial_no=device["serial_number"],
-                    part_no=device["part_number"]
-            )
-        return inventory_pb2.InventoryGetResponse(devinfo=info)
+#        with open("device_info.json") as device_data:
+#            for device in json.load(device_data):
+#                info = inventory_pb2.DeviceInfo(
+#                    name=device["name"],
+#                    description=device["description"],
+#                    id=device["id"],
+#                    mfg_name=device["manufacturing_name"],
+#                    mfg_date=device["manufacturing_date"],
+#                    hw_version=device["hardware_version"],
+#                    fw_version=device["firmware_version"],
+#                    sw_version=device["software_version"],
+#                    serial_no=device["serial_number"],
+#                    part_no=device["part_number"]
+#            )
+        return inventory_pb2.Inventory(self.inv_data)
 
 class NetInterfaceServicer(oc_interfaces_pb2_grpc.NetInterfaceServicer):
 
