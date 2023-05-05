@@ -144,10 +144,10 @@ def gather_device_info():
     inventory = dict()
     # get the bios information
     inventory['bios'] = get_bios_info()
-    inventory['systeminfo'] = get_system_info()
-    inventory['chassisinfo'] = get_chassis_info()
-    inventory['baseboardinfo'] = get_baseboard_info()
-    inventory['cpu'] = get_cpu_info()
+    inventory['system'] = get_system_info()
+    inventory['chassis'] = get_chassis_info()
+    inventory['baseboard'] = get_baseboard_info()
+    inventory['processor'] = get_cpu_info()
     inventory['memory'] = get_memory_info()
     inventory['pci'] = get_pci_info()
 

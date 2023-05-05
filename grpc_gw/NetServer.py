@@ -8,6 +8,7 @@ from concurrent import futures
 import logging
 
 import json
+from google.protobuf import json_format
 import psutil
 
 import grpc
@@ -82,21 +83,32 @@ class InventoryServicer(inventory_pb2_grpc.InventorySvc):
 
     def GetInventory(self, request, context):
         print("### Received Get for the Device Inventory ###")
-#        with open("device_info.json") as device_data:
-#            for device in json.load(device_data):
-#                info = inventory_pb2.DeviceInfo(
-#                    name=device["name"],
-#                    description=device["description"],
-#                    id=device["id"],
-#                    mfg_name=device["manufacturing_name"],
-#                    mfg_date=device["manufacturing_date"],
-#                    hw_version=device["hardware_version"],
-#                    fw_version=device["firmware_version"],
-#                    sw_version=device["software_version"],
-#                    serial_no=device["serial_number"],
-#                    part_no=device["part_number"]
-#            )
-        return inventory_pb2.Inventory(self.inv_data)
+#        data = dict(self.inv_data)
+#        inven = dict(inventory_pb2.Inventory)
+#        print("## Base message ", inven)
+        for entry, value in self.inv_data.items():
+            print(entry)
+            print("Variable type ", type(value))
+            print(value)
+            if entry == 'bios':
+                biosdata = dict()
+                biosdata=value
+                print(biosdata)
+#                j_string = json.dumps(value)
+#                print("## j_string", j_string)
+#                data = dict(inventory_pb2.Inventory)(
+#                    bios=value
+#                    json_format.ParseDict(value, dict('bios'))
+ #               )
+#                json_format.ParseDict(value, data[entry])
+#            data[entry] = j_string
+#        data = inventory_pb2.Inventory
+#        json_format.ParseDict(self.inv_data, data)
+        data = inventory_pb2.Inventory(
+            bios=biosdata
+        )
+        print("Inventory data: ", data)
+        return data
 
 class NetInterfaceServicer(oc_interfaces_pb2_grpc.NetInterfaceServicer):
 

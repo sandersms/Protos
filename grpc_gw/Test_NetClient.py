@@ -14,10 +14,10 @@ import inventory_pb2
 import inventory_pb2_grpc
 
 def get_DeviceInventory(stub):
-    response = stub.InventoryGet(inventory_pb2.InventoryGetRequest())
+    response = stub.GetInventory(inventory_pb2.GetInventoryRequest())
     if response:
         print("Received Device Inventory")
-        print(response.devinfo)
+        print(response)
     else:
         print("Error in Device Inventory Request")
 
