@@ -92,8 +92,32 @@ class InventoryServicer(inventory_pb2_grpc.InventorySvc):
             print(value)
             if entry == 'bios':
                 biosdata = dict()
-                biosdata=value
+                biosdata = value
                 print(biosdata)
+            if entry == 'system':
+                sysdata = dict()
+                sysdata = value
+                print(sysdata)
+            if entry == 'baseboard':
+                boarddata = dict()
+                boarddata = value
+                print(boarddata)
+            if entry == 'chassis':
+                platdata = dict()
+                platdata = value
+                print(platdata)
+            if entry == 'processor':
+                cpudata = dict()
+                cpudata = value
+                print(cpudata)
+            if entry == 'memory':
+                memdata = dict()
+                memdata = value
+                print(memdata)
+            if entry == 'pci':
+                busdata = dict()
+                busdata = value
+                print(busdata)
 #                j_string = json.dumps(value)
 #                print("## j_string", j_string)
 #                data = dict(inventory_pb2.Inventory)(
@@ -105,7 +129,13 @@ class InventoryServicer(inventory_pb2_grpc.InventorySvc):
 #        data = inventory_pb2.Inventory
 #        json_format.ParseDict(self.inv_data, data)
         data = inventory_pb2.Inventory(
-            bios=biosdata
+            bios=biosdata,
+            system=sysdata,
+            baseboard=boarddata,
+            chassis=platdata,
+            processor=cpudata,
+            memory=memdata,
+            pci=busdata
         )
         print("Inventory data: ", data)
         return data
