@@ -8,8 +8,8 @@ import logging
 
 import grpc
 
-import oc_interfaces_pb2
-import oc_interfaces_pb2_grpc
+import openconfig_interfaces_pb2
+import openconfig_interfaces_pb2_grpc
 import inventory_pb2
 import inventory_pb2_grpc
 
@@ -29,7 +29,7 @@ def intf_GetInterface(stub):
 
 def intf_listInterfaces(stub):
     # The list request is empty, so the response is the return of the request
-    response = stub.NetInterfaceList(oc_interfaces_pb2.NetInterfaceListRequest())
+    response = stub.ListNetInterfaces(openconfig_interfaces_pb2.ListNetInterfacesRequest())
     print("Received Interfaces List Response")
     for intf in response:
         print("Interface Name:", intf.name)
@@ -45,7 +45,7 @@ def runClient():
         print("---- Get Device Inventory ----")
         get_DeviceInventory(stub)
         # Get the interface information
-        stub = oc_interfaces_pb2_grpc.NetInterfaceStub(channel)
+        stub = openconfig_interfaces_pb2_grpc.NetInterfaceServiceStub(channel)
         print("---- List Interfaces ----")
         intf_listInterfaces(stub)
         print("---- Retrieve Interface ----")
