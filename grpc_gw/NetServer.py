@@ -112,15 +112,16 @@ class NetInterfaceServicer(openconfig_interfaces_pb2_grpc.NetInterfaceService):
         # Add initialization stuff
         self.if_data = read_interface_info()
     
-    def NetInterfaceGet(self, request, context):
+    def GetNetInterface(self, request, context):
         print("### Get Interface ###")
 
-    def NetInterfaceList(self, request, context):
+    def ListNetInterfaces(self, request, context):
         print("### List Interfaces Request ###")
-        listResponse = openconfig_interfaces_pb2.ListNetInterfacesResponse()
+        print(self.if_data)
+        listResponse = openconfig_interfaces_pb2.ListNetInterfacesResponse(net_interfaces=self.if_data)
         return listResponse
 
-    def NetInterfaceUpdate(self,request, context):
+    def UpdateNetInterface(self,request, context):
         print("### Update Interface ###")
 
 def AddNetServicertoserver(server):

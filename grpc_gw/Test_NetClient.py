@@ -31,6 +31,7 @@ def intf_listInterfaces(stub):
     # The list request is empty, so the response is the return of the request
     response = stub.ListNetInterfaces(openconfig_interfaces_pb2.ListNetInterfacesRequest())
     print("Received Interfaces List Response")
+    print(response)
     for intf in response:
         print("Interface Name:", intf.name)
 
