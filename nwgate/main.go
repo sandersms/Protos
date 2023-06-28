@@ -6,8 +6,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"net"
 	"log"
+	"net"
 
 	"google.golang.org/grpc"
 )
@@ -18,14 +18,16 @@ var (
 
 func main() {
 	flag.Parse()
+	fmt.Println("Starting grpcServer on port", fmt.Sprintf(":%d", *port))
+
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
 	if err != nil {
 		log.Fatalf("listen failed: %v", err)
 	}
-	serv := grpc.NewServer()
+	grpcServer := grpc.NewServer()
 
 	log.Printf("Server listening at %v", lis.Addr())
-	if err := serv.Serve(lis); err != nil {
+	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("serve failed: %v", err)
 	}
 }
