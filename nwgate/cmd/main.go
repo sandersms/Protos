@@ -30,7 +30,7 @@ func main() {
 	}
 	grpcServer := grpc.NewServer()
 
-	inv.RegisterInventorySvcServices(grpcServer, &inventory.Server{})
+	inv.RegisterInventorySvcServer(grpcServer, &inventory.Server{})
 	reflection.Register(grpcServer)
 
 	log.Printf("Server listening at %v", lis.Addr())
