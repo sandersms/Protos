@@ -2,5 +2,6 @@
 
 Prototyping files for varying solutions
 
-- GRPC Gateway for Inventory and Networking API - grpc_gw
-- Golang Gateway for Testing Networking functionality
+- Python GRPC Gateway for Inventory and Networking API - grpc_gw
+- Golang GRPC Gateway for Inventory and Networking functionality - nwgate
+- Golang GRPC Test client for the network gateway functionality - testclient <ip-address>
