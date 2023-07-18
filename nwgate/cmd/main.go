@@ -22,6 +22,8 @@ var (
 
 func main() {
 	flag.Parse()
+	//	ServAddr := os.Args[1]
+	//	ServAddr += fmt.Sprintf(":%d", *port)
 	fmt.Println("Starting grpcServer on port", fmt.Sprintf(":%d", *port))
 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
