@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) 2022-2023 Dell Inc, or its subsidiaries.
 
-// Package inventory is the main package of the application
-package inventory
+// Package dpudev (DPU Device) is the main package of the application
+package dpudev
 
 import (
 	"context"
