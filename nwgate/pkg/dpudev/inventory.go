@@ -14,9 +14,9 @@ import (
 )
 
 // Server contains inventory related OPI services
-type Server struct {
-	pc.UnimplementedInventorySvcServer
-}
+//type Server struct {
+//	pc.UnimplementedInventorySvcServer
+//}
 
 // GetInventory returns inventory information
 func (s *Server) GetInventory(_ context.Context, in *pc.GetInventoryRequest) (*pc.Inventory, error) {

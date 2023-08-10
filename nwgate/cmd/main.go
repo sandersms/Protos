@@ -10,7 +10,7 @@ import (
 	"net"
 
 	inv "github.com/opiproject/opi-api/common/v1/gen/go"
-	"github.com/sandersms/Protos/nwgate/pkg/inventory"
+	"github.com/sandersms/Protos/nwgate/pkg/dpudev"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -31,8 +31,9 @@ func main() {
 		log.Fatalf("listen failed: %v", err)
 	}
 	grpcServer := grpc.NewServer()
+	opiServ := dpudev.NewServer()
 
-	inv.RegisterInventorySvcServer(grpcServer, &inventory.Server{})
+	inv.RegisterInventorySvcServer(grpcServer, opiServ)
 	reflection.Register(grpcServer)
 
 	log.Printf("Server listening at %v", lis.Addr())
