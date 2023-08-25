@@ -13,11 +13,6 @@ import (
 	pc "github.com/opiproject/opi-api/common/v1/gen/go"
 )
 
-// Server contains inventory related OPI services
-//type Server struct {
-//	pc.UnimplementedInventorySvcServer
-//}
-
 // GetInventory returns inventory information
 func (s *Server) GetInventory(_ context.Context, in *pc.GetInventoryRequest) (*pc.Inventory, error) {
 	log.Printf("GetInventory: Received from client: %v", in)

@@ -36,6 +36,9 @@ func main() {
 	inv.RegisterInventorySvcServer(grpcServer, opiServ)
 	reflection.Register(grpcServer)
 
+	//Initialize the Network Device Information
+	dpudev.InitNetworkData()
+
 	log.Printf("Server listening at %v", lis.Addr())
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("serve failed: %v", err)
