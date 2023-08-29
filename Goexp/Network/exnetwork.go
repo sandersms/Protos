@@ -5,6 +5,7 @@ import (
 
 	"github.com/vishvananda/netlink"
 	// ipb "github.com/sandersms/Protos/protobuf/network/opencfg/v1alpha1/gen/go"
+	"golang.org/x/sys/unix"
 )
 
 //type Netintfs struct {
@@ -13,8 +14,13 @@ import (
 //}
 
 type Ifports struct {
-	name   string
-	iftype string
+	name     string
+	ifindex  int
+	iftype   string
+	mtu      int
+	loopback bool
+	enabled  bool
+	logical  bool
 }
 
 func main() {
@@ -26,7 +32,7 @@ func main() {
 
 	//Initialize the datastore
 	Intfs := make(map[int]*Ifports)
-	fmt.Println("Intfs:", Intfs)
+	// fmt.Println("Intfs:", Intfs)
 
 	// Output the parameters retrieved for the list of links
 	var idx int = 0
@@ -37,11 +43,18 @@ func main() {
 		fmt.Println("Flags", intf.Attrs().Flags)
 		fmt.Println("MTU", intf.Attrs().MTU)
 		fmt.Println("Raw Attributes", intf.Attrs())
+		if intf.Attrs().RawFlags&unix.IFF_LOOPBACK != 0 {
+			fmt.Println("Loopback interface")
+		}
+		fmt.Println("Encap Type", intf.Attrs().EncapType)
+		// check for an actual device and not loopback interface
 		if intf.Type() == "device" {
 			netif := new(Ifports)
 			// Add the information to the Interface structure for the fixed interfaces
 			netif.name = intf.Attrs().Name
-			netif.iftype = intf.Type()
+			netif.ifindex = intf.Attrs().Index
+			netif.iftype = intf.Attrs().EncapType
+			netif.mtu = intf.Attrs().MTU
 			//fmt.Println("NetInterface:", netif)
 			Intfs[idx] = netif
 			// increment index
@@ -49,6 +62,6 @@ func main() {
 		}
 	}
 	for i := range Intfs {
-		fmt.Println(Intfs[i].name)
+		fmt.Println(Intfs[i].name, Intfs[i].iftype, Intfs[i].mtu, Intfs[i].ifindex)
 	}
 }
