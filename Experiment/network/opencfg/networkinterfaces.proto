@@ -7,9 +7,9 @@
 //     aip.dev/not-precedent: counters, mtu, index must be uint and not int. --)
 syntax = "proto3";
 
-package opi_api.network.opinetcommon.v1alpha1;
+package exper.network.opencfg.v1alpha1;
 
-option java_package = "opi_api.network.v1alpha1";
+option java_package = "exper.network.opencfg.v1alpha1";
 option java_multiple_files = true;
 option java_outer_classname = "NetworkInterfacesProto";
 
@@ -134,7 +134,7 @@ message State {
     // Interface Index
     uint32 ifindex = 7;
     // Admin State
-    network.opinetcommon.v1alpha1.AdminState admin_state = 8;
+    network.opencfg.v1alpha1.AdminState admin_state = 8;
     // Operational State
     OperState oper_state = 9;
     // Last Change
