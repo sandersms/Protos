@@ -1,5 +1,8 @@
 # Protos
 
+[![Linters](https://github.com/opiproject/pydpu/actions/workflows/linters.yml/badge.svg)](https://github.com/opiproject/pydpu/actions/workflows/linters.yml)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/opiproject/pydpu/badge)](https://securityscorecards.dev/viewer/?platform=github.com&org=opiproject&repo=pydpu)
+
 Prototyping files for varying solutions
 
 - Python GRPC Gateway for Inventory and Networking API - grpc_gw
