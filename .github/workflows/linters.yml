@@ -53,4 +53,4 @@ jobs:
       - uses: actions/setup-go@v5
       - uses: golangci/golangci-lint-action@v4
         with:
-          working-directory: .
+          working-directory: ./nwgate
