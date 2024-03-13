@@ -10,7 +10,7 @@ import (
 
 	"github.com/vishvananda/netlink"
 
-	ipb "github.com/sandersms/Protos/protobuf/network/opencfg/v1alpha1/gen/go"
+	ipb "github.com/sandersms/Protos/Experiment/network/opencfg/v1alpha1/gen/go"
 )
 
 // Initialize the network device information
@@ -30,9 +30,11 @@ func InitNetworkData() {
 // GetNetInterface gets the network interface information
 func (s *Server) GetNetInterface(_ context.Context, in *ipb.GetNetInterfaceRequest) (*ipb.NetInterface, error) {
 	log.Printf("GetNetInterface: Received from client %v", in)
+	return &ipb.NetInterface{}, nil
 }
 
 // ListNetInterfaces provides a list of the network interfaces
 func (s *Server) ListNetInterfaces(_ context.Context, in *ipb.ListNetInterfacesRequest) (*ipb.ListNetInterfacesResponse, error) {
 	log.Printf("ListNetInterface: Received from client %v", in)
+	return &ipb.ListNetInterfacesResponse{}, nil
 }

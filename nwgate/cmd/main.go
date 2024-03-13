@@ -9,7 +9,7 @@ import (
 	"log"
 	"net"
 
-	inv "github.com/opiproject/opi-api/common/v1/gen/go"
+	inv "github.com/opiproject/opi-api/inventory/v1/gen/go"
 	"github.com/sandersms/Protos/nwgate/pkg/dpudev"
 
 	"google.golang.org/grpc"
@@ -33,7 +33,7 @@ func main() {
 	grpcServer := grpc.NewServer()
 	opiServ := dpudev.NewServer()
 
-	inv.RegisterInventorySvcServer(grpcServer, opiServ)
+	inv.RegisterInventoryServiceServer(grpcServer, opiServ)
 	reflection.Register(grpcServer)
 
 	//Initialize the Network Device Information

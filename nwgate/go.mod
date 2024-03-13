@@ -4,8 +4,8 @@ go 1.20
 
 require (
 	github.com/jaypipes/ghw v0.12.0
-	github.com/opiproject/opi-api v0.0.0-20230712141241-3ccebf87270b
-	github.com/sandersms/Protos v0.0.0-20240311175639-91087a19061e
+	github.com/opiproject/opi-api v0.0.0-20240304222410-5dba226aaa9e
+	github.com/sandersms/Protos v0.0.0-20240311222926-75de84933dc3
 	github.com/vishvananda/netlink v1.1.0
 	google.golang.org/grpc v1.62.1
 )
@@ -15,6 +15,7 @@ require (
 	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.1 // indirect
 	github.com/jaypipes/pcidb v1.0.0 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect

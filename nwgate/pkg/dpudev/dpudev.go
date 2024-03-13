@@ -6,12 +6,12 @@ package dpudev
 import (
 	"fmt"
 
-	pb "github.com/opiproject/opi-api/common/v1/gen/go"
+	pb "github.com/opiproject/opi-api/inventory/v1/gen/go"
 )
 
 // The Server Object
 type Server struct {
-	pb.UnimplementedInventorySvcServer
+	pb.UnimplementedInventoryServiceServer
 	Dpus map[string]*pb.Inventory
 }
 
