@@ -36,7 +36,7 @@ func main() {
 	inv.RegisterInventoryServiceServer(grpcServer, opiServ)
 	reflection.Register(grpcServer)
 
-	//Initialize the Network Device Information
+	// Initialize the Network Device Information
 	dpudev.InitNetworkData()
 
 	log.Printf("Server listening at %v", lis.Addr())

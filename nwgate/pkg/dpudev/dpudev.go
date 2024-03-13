@@ -15,7 +15,7 @@ type Server struct {
 	Dpus map[string]*pb.Inventory
 }
 
-// Create initialized instance of the Dpu Device server
+// NewServer creates the initialized instance of the Dpu Device server
 func NewServer() *Server {
 	fmt.Println("Creating DPU Device Server")
 	return &Server{

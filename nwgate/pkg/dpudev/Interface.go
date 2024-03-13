@@ -13,16 +13,16 @@ import (
 	ipb "github.com/sandersms/Protos/Experiment/network/opencfg/v1alpha1/gen/go"
 )
 
-// Initialize the network device information
+// InitNetworkData initialize the network device information
 func InitNetworkData() {
 	// Get the list of links on the device
-	n_ifs, err := netlink.LinkList()
+	nifs, err := netlink.LinkList()
 	if err != nil {
 		panic(err)
 	}
 
 	// Output the parameters retrieved for the list of links
-	for _, intf := range n_ifs {
+	for _, intf := range nifs {
 		fmt.Println("Name", intf.Attrs().Name)
 	}
 }

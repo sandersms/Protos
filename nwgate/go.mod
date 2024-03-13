@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/jaypipes/ghw v0.12.0
 	github.com/opiproject/opi-api v0.0.0-20240304222410-5dba226aaa9e
-	github.com/sandersms/Protos v0.0.0-20240313190718-cd89a7361a93
+	github.com/sandersms/Protos v0.0.0-20240313191539-e9516759f329
 	github.com/vishvananda/netlink v1.1.0
 	google.golang.org/grpc v1.62.1
 )
@@ -22,9 +22,11 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rogpeppe/go-internal v1.12.0 // indirect
 	github.com/vishvananda/netns v0.0.4 // indirect
+	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
 	golang.org/x/net v0.22.0 // indirect
 	golang.org/x/sys v0.18.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
+	golang.org/x/tools v0.19.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20240311173647-c811ad7063a7 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240311173647-c811ad7063a7 // indirect
 	google.golang.org/protobuf v1.33.0 // indirect
