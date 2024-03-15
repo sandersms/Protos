@@ -11,25 +11,33 @@ import json
 from google.protobuf import json_format
 import psutil
 
+import sys
+
+print(sys.path)
+print(__name__)
+
 import grpc
 
 import devinventory
-import openconfig_interfaces_pb2
-import openconfig_interfaces_pb2_grpc
-import inventory_pb2
-import inventory_pb2_grpc
+from proto.v1 import (
+    networkinterfaces_pb2,
+    networkinterfaces_pb2_grpc,
+    inventory_pb2,
+    inventory_pb2_grpc,
+)
 
+print(__package__)
 
 def read_interface_info():
     # read the interface information and populate the network interface settings
     interface_list = []
     for intf, if_info in psutil.net_if_stats().items():
-        ifset = openconfig_interfaces_pb2.NetInterface(
+        ifset = networkinterfaces_pb2.NetInterface(
             name=intf,
-            config=openconfig_interfaces_pb2.Config(
+            config=networkinterfaces_pb2.Config(
                 name=intf
             ),
-            state = openconfig_interfaces_pb2.State(
+            state = networkinterfaces_pb2.State(
             name=intf,
             type=0,
             mtu=if_info.mtu,
@@ -54,7 +62,7 @@ def read_interface_info():
 
     return interface_list
 
-class InventoryServicer(inventory_pb2_grpc.InventorySvc):
+class InventoryServicer(inventory_pb2_grpc.InventoryServiceServicer):
 
     def __init__(self):
         # Add Initialization Stuff
@@ -106,7 +114,7 @@ class InventoryServicer(inventory_pb2_grpc.InventorySvc):
         print("Inventory data: ", data)
         return data
 
-class NetInterfaceServicer(openconfig_interfaces_pb2_grpc.NetInterfaceService):
+class NetInterfaceServicer(networkinterfaces_pb2_grpc.NetInterfaceService):
 
     def __init__(self):
         # Add initialization stuff
@@ -118,7 +126,7 @@ class NetInterfaceServicer(openconfig_interfaces_pb2_grpc.NetInterfaceService):
     def ListNetInterfaces(self, request, context):
         print("### List Interfaces Request ###")
         print(self.if_data)
-        listResponse = openconfig_interfaces_pb2.ListNetInterfacesResponse(net_interfaces=self.if_data)
+        listResponse = networkinterfaces_pb2.ListNetInterfacesResponse(net_interfaces=self.if_data)
         return listResponse
 
     def UpdateNetInterface(self,request, context):
@@ -126,8 +134,8 @@ class NetInterfaceServicer(openconfig_interfaces_pb2_grpc.NetInterfaceService):
 
 def AddNetServicertoserver(server):
     # Add the various servicer functions to the server
-    openconfig_interfaces_pb2_grpc.add_NetInterfaceServiceServicer_to_server(NetInterfaceServicer(), server)
-    inventory_pb2_grpc.add_InventorySvcServicer_to_server(InventoryServicer(), server)
+    networkinterfaces_pb2_grpc.add_NetInterfaceServiceServicer_to_server(NetInterfaceServicer(), server)
+    inventory_pb2_grpc.add_InventoryServiceServicer_to_server(InventoryServicer(), server)
 
 def server():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=4))
