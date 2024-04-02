@@ -25,15 +25,15 @@ func main() {
 	fmt.Println("Starting", ProgName)
 
 	// address to connect to Server
-	ServAddr := os.Args[1]
-	ServAddr += fmt.Sprintf(":%d", *port)
-	fmt.Println(ServAddr)
-
 	flag.Parse()
-	fmt.Println("Connecting to grpcServer on", ServAddr)
+	//ServAddr := os.Args[1]
+	//ServAddr += fmt.Sprintf(":%d", *port)
+	fmt.Println("connecting to grpcServer on port", fmt.Sprintf(":%d", *port))
+
+	//fmt.Println("Connecting to grpcServer on", ServAddr)
 
 	// Setup the connection to the server for testing
-	cxn, err := grpc.Dial(ServAddr, grpc.WithInsecure())
+	cxn, err := grpc.Dial(fmt.Sprintf(":%d", *port), grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("grpc.Dial err: %v", err)
 	}
