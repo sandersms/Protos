@@ -1,4 +1,4 @@
-// Copyright (c) 2023 xxxx
+// Copyright (c) 2023-2024 xxxx
 
 // Package main is the main package for the application
 package main
@@ -11,7 +11,7 @@ import (
 	"os"
 	"time"
 
-	inv "github.com/opiproject/opi-api/common/v1/gen/go"
+	inv "github.com/opiproject/opi-api/inventory/v1/gen/go"
 
 	"google.golang.org/grpc"
 )
@@ -39,7 +39,7 @@ func main() {
 	}
 	defer cxn.Close()
 
-	InvClient := inv.NewInventorySvcClient(cxn)
+	InvClient := inv.NewInventoryServiceClient(cxn)
 
 	// Get the inventory data
 	cntx, cancel := context.WithTimeout(context.Background(), time.Second)

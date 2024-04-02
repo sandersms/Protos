@@ -1,4 +1,4 @@
-// Copyright (c) 2023 xxxx
+// Copyright (c) 2023-2024 xxxx
 
 // Package main is the main package for the application
 package main
@@ -41,6 +41,6 @@ func main() {
 
 	log.Printf("Server listening at %v", lis.Addr())
 	if err := grpcServer.Serve(lis); err != nil {
-		log.Fatalf("serve failed: %v", err)
+		log.Fatalf("server failed: %v", err)
 	}
 }
