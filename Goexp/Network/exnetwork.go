@@ -42,13 +42,15 @@ func main() {
 		fmt.Println("Name", intf.Attrs().Name)
 		fmt.Println("Flags", intf.Attrs().Flags)
 		fmt.Println("MTU", intf.Attrs().MTU)
+		fmt.Println("OperState", intf.Attrs().OperState)
 		fmt.Println("Raw Attributes", intf.Attrs())
 		if intf.Attrs().RawFlags&unix.IFF_LOOPBACK != 0 {
 			fmt.Println("Loopback interface")
 		}
 		fmt.Println("Encap Type", intf.Attrs().EncapType)
+		fmt.Println("----------")
 		// check for an actual device and not loopback interface
-		if intf.Type() == "device" {
+		if intf.Type() == "device" && intf.Attrs().EncapType != "loopback" {
 			netif := new(Ifports)
 			// Add the information to the Interface structure for the fixed interfaces
 			netif.name = intf.Attrs().Name

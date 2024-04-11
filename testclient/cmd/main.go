@@ -1,4 +1,4 @@
-// Copyright (c) 2023 xxxx
+// Copyright (c) 2023-2024 xxxx
 
 // Package main is the main package for the application
 package main
@@ -11,7 +11,7 @@ import (
 	"os"
 	"time"
 
-	inv "github.com/opiproject/opi-api/common/v1/gen/go"
+	inv "github.com/opiproject/opi-api/inventory/v1/gen/go"
 
 	"google.golang.org/grpc"
 )
@@ -25,21 +25,21 @@ func main() {
 	fmt.Println("Starting", ProgName)
 
 	// address to connect to Server
-	ServAddr := os.Args[1]
-	ServAddr += fmt.Sprintf(":%d", *port)
-	fmt.Println(ServAddr)
-
 	flag.Parse()
-	fmt.Println("Connecting to grpcServer on", ServAddr)
+	//ServAddr := os.Args[1]
+	//ServAddr += fmt.Sprintf(":%d", *port)
+	fmt.Println("connecting to grpcServer on port", fmt.Sprintf(":%d", *port))
+
+	//fmt.Println("Connecting to grpcServer on", ServAddr)
 
 	// Setup the connection to the server for testing
-	cxn, err := grpc.Dial(ServAddr, grpc.WithInsecure())
+	cxn, err := grpc.Dial(fmt.Sprintf(":%d", *port), grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("grpc.Dial err: %v", err)
 	}
 	defer cxn.Close()
 
-	InvClient := inv.NewInventorySvcClient(cxn)
+	InvClient := inv.NewInventoryServiceClient(cxn)
 
 	// Get the inventory data
 	cntx, cancel := context.WithTimeout(context.Background(), time.Second)
