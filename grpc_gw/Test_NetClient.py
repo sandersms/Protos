@@ -8,10 +8,12 @@ import logging
 
 import grpc
 
-import openconfig_interfaces_pb2
-import openconfig_interfaces_pb2_grpc
-import inventory_pb2
-import inventory_pb2_grpc
+from proto.v1 import (
+    networkinterfaces_pb2,
+    networkinterfaces_pb2_grpc,
+    inventory_pb2,
+    inventory_pb2_grpc,
+)
 
 def get_DeviceInventory(stub):
     response = stub.GetInventory(inventory_pb2.GetInventoryRequest())
@@ -29,7 +31,7 @@ def intf_GetInterface(stub):
 
 def intf_listInterfaces(stub):
     # The list request is empty, so the response is the return of the request
-    response = stub.ListNetInterfaces(openconfig_interfaces_pb2.ListNetInterfacesRequest())
+    response = stub.ListNetInterfaces(networkinterfaces_pb2.ListNetInterfacesRequest())
     print("Received Interfaces List Response")
     print(response)
     for intf in response:
@@ -42,11 +44,11 @@ def runClient():
     print("Will try to get the Device data ...")
     with grpc.insecure_channel('localhost:50051') as channel:
         # Get the inventory data first
-        stub = inventory_pb2_grpc.InventorySvcStub(channel)
+        stub = inventory_pb2_grpc.InventoryServiceStub(channel)
         print("---- Get Device Inventory ----")
         get_DeviceInventory(stub)
         # Get the interface information
-        stub = openconfig_interfaces_pb2_grpc.NetInterfaceServiceStub(channel)
+        stub = networkinterfaces_pb2_grpc.NetInterfaceServiceStub(channel)
         print("---- List Interfaces ----")
         intf_listInterfaces(stub)
         print("---- Retrieve Interface ----")
