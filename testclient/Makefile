@@ -7,7 +7,7 @@ compile: get build
 
 build:
 	@echo "  >  Building binaries..."
-	go build -o ${PROJECTNAME} ./cmd/...
+	@CGO_ENABLED=0 GOOS=$(uname) go build -o ${PROJECTNAME} ./cmd/...
 
 get:
 	@echo "  >  Checking if there are any missing dependencies..."
