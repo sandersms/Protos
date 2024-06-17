@@ -20,6 +20,8 @@ type Ifports struct {
 	mtu      int
 	loopback bool
 	enabled  bool
+	st_admin bool
+	st_oper  string
 	logical  bool
 }
 
@@ -57,6 +59,14 @@ func main() {
 			netif.ifindex = intf.Attrs().Index
 			netif.iftype = intf.Attrs().EncapType
 			netif.mtu = intf.Attrs().MTU
+			if intf.Attrs().RawFlags&unix.IFF_LOOPBACK != 0 {
+				netif.loopback = true
+			}
+			netif.st_oper = fmt.Sprint(intf.Attrs().OperState)
+			//netif.st_oper = fmt.Println(intf.Attrs().OperState)
+			if intf.Attrs().RawFlags&unix.IFF_UP != 0 {
+				netif.st_admin = true
+			}
 			//fmt.Println("NetInterface:", netif)
 			Intfs[idx] = netif
 			// increment index
@@ -64,6 +74,6 @@ func main() {
 		}
 	}
 	for i := range Intfs {
-		fmt.Println(Intfs[i].name, Intfs[i].iftype, Intfs[i].mtu, Intfs[i].ifindex)
+		fmt.Println(Intfs[i].name, Intfs[i].iftype, Intfs[i].mtu, Intfs[i].loopback, Intfs[i].ifindex, Intfs[i].st_admin, Intfs[i].st_oper)
 	}
 }
