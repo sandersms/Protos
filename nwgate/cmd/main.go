@@ -16,17 +16,20 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-var (
-	port = flag.Int("port", 50153, "Server Port")
-)
-
 func main() {
-	flag.Parse()
-	//	ServAddr := os.Args[1]
-	//	ServAddr += fmt.Sprintf(":%d", *port)
-	fmt.Println("Starting grpcServer on port", fmt.Sprintf(":%d", *port))
+	var grpcPort int
+	flag.IntVar(&grpcPort, "grpc_port", 50153, "The gRPC server port")
 
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
+	var httpPort int
+	flag.IntVar(&httpPort, "http_port", 8082, "The HTTP server port")
+
+	flag.Parse()
+
+	// Initialize the Network Device Information
+	dpudev.InitNetworkData()
+
+	fmt.Println("Starting grpcServer on port", fmt.Sprintf(":%d", grpcPort))
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", grpcPort))
 	if err != nil {
 		log.Fatalf("listen failed: %v", err)
 	}
@@ -35,9 +38,6 @@ func main() {
 
 	inv.RegisterInventoryServiceServer(grpcServer, opiServ)
 	reflection.Register(grpcServer)
-
-	// Initialize the Network Device Information
-	dpudev.InitNetworkData()
 
 	log.Printf("Server listening at %v", lis.Addr())
 	if err := grpcServer.Serve(lis); err != nil {

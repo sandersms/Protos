@@ -12,13 +12,15 @@ import (
 // The Server Object
 type Server struct {
 	pb.UnimplementedInventoryServiceServer
-	Dpus map[string]*pb.Inventory
+	Pagination map[string]int
+	Dpus       map[string]*pb.Inventory
 }
 
 // NewServer creates the initialized instance of the Dpu Device server
 func NewServer() *Server {
 	fmt.Println("Creating DPU Device Server")
 	return &Server{
-		Dpus: make(map[string]*pb.Inventory),
+		Pagination: make(map[string]int),
+		Dpus:       make(map[string]*pb.Inventory),
 	}
 }
