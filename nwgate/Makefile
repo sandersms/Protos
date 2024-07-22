@@ -11,5 +11,5 @@ build:
 
 get:
 	@echo "  >  Checking if there are any missing dependencies..."
-	@CGO_ENABLED=0 go get -u ./cmd
+	@CGO_ENABLED=0 go get -u ./...
 	@CGO_ENABLED=0 go mod tidy

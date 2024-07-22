@@ -25,9 +25,6 @@ func main() {
 
 	flag.Parse()
 
-	// Initialize the Network Device Information
-	dpudev.InitNetworkData()
-
 	fmt.Println("Starting grpcServer on port", fmt.Sprintf(":%d", grpcPort))
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", grpcPort))
 	if err != nil {
@@ -35,6 +32,9 @@ func main() {
 	}
 	grpcServer := grpc.NewServer()
 	opiServ := dpudev.NewServer()
+
+	// Initialize the Network Device Information
+	dpudev.InitNetworkData(opiServ)
 
 	inv.RegisterInventoryServiceServer(grpcServer, opiServ)
 	reflection.Register(grpcServer)
