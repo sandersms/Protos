@@ -1,7 +1,7 @@
 // Copyright (c) xxxx, .
 
-// Package utils is support functions of the application
-package utils
+// Package utils is common support functions of the application
+package common
 
 import (
 	"google.golang.org/protobuf/proto"

@@ -1,7 +1,7 @@
 // Copyright (c) xxxx, .
 
-// Package utils is support functions of the application
-package utils
+// Package common is the common support functions of the application
+package common
 
 import (
 	"log"

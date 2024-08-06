@@ -9,7 +9,7 @@ import (
 	"log"
 	"net"
 
-	"github.com/sandersms/Protos/nwgate/pkg/utils"
+	"github.com/sandersms/Protos/nwgate/pkg/common"
 	"github.com/vishvananda/netlink"
 	"golang.org/x/sys/unix"
 
@@ -137,7 +137,7 @@ func (s *Server) ListNetInterfaces(_ context.Context, in *ipb.ListNetInterfacesR
 	}
 
 	// fetch pagination from the database, calculate size and offset
-	size, offset, err := utils.ExtractPagination(in.PageSize, in.PageToken, s.Pagination)
+	size, offset, err := common.ExtractPagination(in.PageSize, in.PageToken, s.Pagination)
 	if err != nil {
 		return nil, err
 	}
