@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
-// Copyright (c) 2022-2024 Dell Inc, or its subsidiaries.
-// Copyright (C) 2023 Intel Corporation
 
-// main is the main package of the application
+// main is the main package of the conditional bridge application
 package main
 
 import (
@@ -15,7 +13,7 @@ import (
 
 	"github.com/opiproject/opi-spdk-bridge/pkg/utils"
 
-	pc "github.com/opiproject/opi-api/inventory/v1/gen/go"
+	inv "github.com/opiproject/opi-api/inventory/v1/gen/go"
 
 	"github.com/philippgille/gokv"
 	"github.com/philippgille/gokv/redis"
@@ -72,7 +70,7 @@ func runGatewayServer(grpcPort int, httpPort int) {
 	mux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 	endpoint := fmt.Sprintf("localhost:%d", grpcPort)
-	registerGatewayHandler(ctx, mux, endpoint, opts, pc.RegisterInventoryServiceHandlerFromEndpoint, "inventory")
+	common.registerGatewayHandler(ctx, mux, endpoint, opts, inv.RegisterInventoryServiceHandlerFromEndpoint, "inventory")
 
 	// Start HTTP server (and proxy calls to gRPC server endpoint)
 	log.Printf("HTTP Server listening at %v", httpPort)
@@ -85,14 +83,5 @@ func runGatewayServer(grpcPort int, httpPort int) {
 	err := server.ListenAndServe()
 	if err != nil {
 		log.Panic("cannot start HTTP gateway server")
-	}
-}
-
-type registerHandlerFunc func(context.Context, *runtime.ServeMux, string, []grpc.DialOption) error
-
-func registerGatewayHandler(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption, registerFunc registerHandlerFunc, serviceName string) {
-	err := registerFunc(ctx, mux, endpoint, opts)
-	if err != nil {
-		log.Panicf("cannot register %s handler server: %v", serviceName, err)
 	}
 }
