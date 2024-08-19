@@ -15,6 +15,8 @@ import (
 
 	"github.com/opiproject/opi-spdk-bridge/pkg/utils"
 
+	pc "github.com/opiproject/opi-api/inventory/v1/gen/go"
+
 	"github.com/philippgille/gokv"
 	"github.com/philippgille/gokv/redis"
 
@@ -83,5 +85,14 @@ func runGatewayServer(grpcPort int, httpPort int) {
 	err := server.ListenAndServe()
 	if err != nil {
 		log.Panic("cannot start HTTP gateway server")
+	}
+}
+
+type registerHandlerFunc func(context.Context, *runtime.ServeMux, string, []grpc.DialOption) error
+
+func registerGatewayHandler(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption, registerFunc registerHandlerFunc, serviceName string) {
+	err := registerFunc(ctx, mux, endpoint, opts)
+	if err != nil {
+		log.Panicf("cannot register %s handler server: %v", serviceName, err)
 	}
 }
