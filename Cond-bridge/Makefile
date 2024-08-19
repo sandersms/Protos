@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2023 Dell Inc, or its subsidiaries.
+
+ROOT_DIR='.'
+PROJECTNAME=$(shell basename "$(PWD)")
+
+# Make is verbose in Linux. Make it silent.
+MAKEFLAGS += --silent
+
+compile: get build
+
+build:
+	@echo "  >  Building binaries..."
+	@CGO_ENABLED=0 go build -o ${PROJECTNAME} ./cmd/...
+
+get:
+	@echo "  >  Checking if there are any missing dependencies..."
+	@CGO_ENABLED=0 go get ./...
+
