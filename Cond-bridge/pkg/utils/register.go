@@ -11,9 +11,6 @@ import (
 	"google.golang.org/grpc"
 )
 
-// RegHandles registers the gateway function handlers
-type RegHandles struct{}
-
 // handler function to be registered by the gateway
 type registerHandlerFunc func(context.Context, *runtime.ServeMux, string, []grpc.DialOption) error
 
