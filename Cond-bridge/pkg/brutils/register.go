@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // utility support functions for registration handler functions
-package utils
+package brutils
 
 import (
 	"context"
