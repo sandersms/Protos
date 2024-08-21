@@ -8,17 +8,19 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"time"
 
 	"github.com/opiproject/opi-spdk-bridge/pkg/utils"
-	//	"github.com/sandersms/Protos/Cond-bridge/pkg/inventory"
+	// "github.com/sandersms/Protos/Cond-bridge/pkg/inventory"
 
 	"github.com/philippgille/gokv"
 	"github.com/philippgille/gokv/redis"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/reflection"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 )
@@ -57,6 +59,23 @@ func main() {
 	}(store)
 
 	go runGatewayServer(grpcPort, httpPort)
+	runGrpcServer(grpcPort)
+}
+
+func runGrpcServer(grpcPort int) {
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", grpcPort))
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
+	s := grpc.NewServer()
+
+	inventory.registerInventorytoGrpc(s)
+	reflection.Register(s)
+
+	log.Printf("gRPC Server listening at %v", lis.Addr())
+	if err := s.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
+	}
 }
 
 func runGatewayServer(grpcPort int, httpPort int) {
