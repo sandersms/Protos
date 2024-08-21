@@ -23,7 +23,7 @@ type Server struct {
 }
 
 // abstracted registration functions for adding inventory services
-func registerInventorytoGateway(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) {
+func (s *Server) registerInventorytoGateway(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) {
 	//	err := ipb.RegisterInventoryServiceHandlerFromEndpoint(ctx, mux, endpoint, opts)
 	//	if err != nil {
 	//		log.Panicf("cannot register %s handler server: %v", "inventory", err)
@@ -32,9 +32,9 @@ func registerInventorytoGateway(ctx context.Context, mux *runtime.ServeMux, endp
 	brutils.registerGatewayHandler(ctx, mux, endpoint, opts, ipb.RegisterInventoryServiceHandlerFromEndpoint, "inventory")
 }
 
-func registerInventorytoGrpc(s grpc.ServiceRegistrar) {
+func (s *Server) registerInventorytoGrpc(svr grpc.ServiceRegistrar) {
 	log.Printf("Register Inventory Service Server to grpc")
-	ipb.RegisterInventoryServiceServer(s, &Server{})
+	ipb.RegisterInventoryServiceServer(svr, &Server{})
 }
 
 // GetInventory returns inventory information
