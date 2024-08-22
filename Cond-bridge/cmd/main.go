@@ -13,7 +13,6 @@ import (
 	"time"
 
 	"github.com/opiproject/opi-spdk-bridge/pkg/utils"
-	// "github.com/sandersms/Protos/Cond-bridge/pkg/inventory"
 
 	"github.com/philippgille/gokv"
 	"github.com/philippgille/gokv/redis"
@@ -89,6 +88,7 @@ func runGatewayServer(grpcPort int, httpPort int) {
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 	endpoint := fmt.Sprintf("localhost:%d", grpcPort)
 	inventory.registerInventorytoGateway(ctx, mux, endpoint, opts)
+	
 
 	// Start HTTP server (and proxy calls to gRPC server endpoint)
 	log.Printf("HTTP Server listening at %v", httpPort)
