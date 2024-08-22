@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-// generic function for registering to the gateway
+// generic function for registering the endpoint to the gateway
 type registerHandlerFunc func(context.Context, *runtime.ServeMux, string, []grpc.DialOption) error
 
 func RegisterGatewayHandler(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption, registerFunc registerHandlerFunc, serviceName string) {
