@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
-// utility support functions for registration handler functions
+// Package inventory is the base inventory functions
 package inventory
 
 import (
@@ -11,31 +11,11 @@ import (
 	ipb "github.com/opiproject/opi-api/inventory/v1/gen/go"
 
 	"github.com/jaypipes/ghw"
-
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-	"google.golang.org/grpc"
 )
 
 // Server contains inventory related OPI services
 type Server struct {
 	ipb.UnimplementedInventoryServiceServer
-}
-
-type invRegistration struct{}
-
-// abstracted registration functions for adding inventory services
-func (v invRegistration) registerInventorytoGateway(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) {
-	//	err := ipb.RegisterInventoryServiceHandlerFromEndpoint(ctx, mux, endpoint, opts)
-	//	if err != nil {
-	//		log.Panicf("cannot register %s handler server: %v", "inventory", err)
-	//	}
-	log.Printf("Register Inventory Handlers to gateway")
-	brutils.registerGatewayHandler(ctx, mux, endpoint, opts, ipb.RegisterInventoryServiceHandlerFromEndpoint, "inventory")
-}
-
-func (v invRegistration) registerInventorytoGrpc(svr grpc.ServiceRegistrar) {
-	log.Printf("Register Inventory Service Server to grpc")
-	ipb.RegisterInventoryServiceServer(svr, &Server{})
 }
 
 // GetInventory returns inventory information

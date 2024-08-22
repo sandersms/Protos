@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
-// utility support functions for registration handler functions
+// utility support functions for generic registration handler
 package brutils
 
 import (
@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-// handler function to be registered by the gateway
+// generic function for registering to the gateway
 type registerHandlerFunc func(context.Context, *runtime.ServeMux, string, []grpc.DialOption) error
 
 func registerGatewayHandler(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption, registerFunc registerHandlerFunc, serviceName string) {
