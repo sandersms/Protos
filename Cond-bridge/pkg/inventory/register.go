@@ -8,7 +8,7 @@ import (
 	"log"
 
 	ipb "github.com/opiproject/opi-api/inventory/v1/gen/go"
-	//	"github.com/sandersms/Protos/Cond-bridge/pkg/brutils"
+	"github.com/sandersms/Protos/Cond-bridge/pkg/brutils"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
@@ -16,12 +16,8 @@ import (
 
 // abstracted registration functions for adding inventory services
 func RegisterInventorytoGateway(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) {
-	err := ipb.RegisterInventoryServiceHandlerFromEndpoint(ctx, mux, endpoint, opts)
-	if err != nil {
-		log.Panicf("cannot register %s handler server: %v", "inventory", err)
-	}
 	log.Printf("Register Inventory Handlers to gateway")
-	//brutils.RegisterGatewayHandler(ctx, mux, endpoint, opts, ipb.RegisterInventoryServiceHandlerFromEndpoint, "inventory")
+	brutils.RegisterGatewayHandler(ctx, mux, endpoint, opts, ipb.RegisterInventoryServiceHandlerFromEndpoint, "inventory")
 }
 
 func RegisterInventorytoGrpc(svr grpc.ServiceRegistrar) {
