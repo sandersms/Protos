@@ -1,3 +1,6 @@
+//go:build inventory
+// +build inventory
+
 // SPDX-License-Identifier: Apache-2.0
 
 // Registration functions for the inventory package

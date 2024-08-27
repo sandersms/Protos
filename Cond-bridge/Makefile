@@ -17,3 +17,6 @@ get:
 	@echo "  >  Checking if there are any missing dependencies..."
 	@CGO_ENABLED=0 go get ./...
 
+inventory:
+	@echo "  >  building binaries for inventory ..."
+	@CGO_ENABLED=0 go build -o ${PROJECTNAME} -tags=inventory ./cmd/...
