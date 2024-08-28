@@ -7,10 +7,10 @@ PROJECTNAME=$(shell basename "$(PWD)")
 # Make is verbose in Linux. Make it silent.
 MAKEFLAGS += --silent
 
-compile: get build
+compile: get inventory
 
-build:
-	@echo "  >  Building binaries..."
+base:
+	@echo "  >  Building base binaries..."
 	@CGO_ENABLED=0 go build -o ${PROJECTNAME} ./cmd/...
 
 get:
@@ -20,3 +20,6 @@ get:
 inventory:
 	@echo "  >  building binaries for inventory ..."
 	@CGO_ENABLED=0 go build -o ${PROJECTNAME} -tags=inventory ./cmd/...
+
+all:
+	@echo "  >  building full capabilities binaries..."
