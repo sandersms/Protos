@@ -115,14 +115,30 @@ func InitNetworkData(s *Server) {
 			}
 		}
 	}
+	log.Printf("%s", s.Intfs)
+
 	for _, Intfs := range s.Intfs {
 		fmt.Println(Intfs.Name, Intfs.State.Type, Intfs.State.Mtu, Intfs.State.LoopbackMode, Intfs.State.Enabled, Intfs.State.Ifindex, Intfs.State.AdminState, Intfs.State.OperState)
 	}
 }
 
+// UpdateNetInterface supports configuration updates to the network interface
+func (s *Server) UpdateNetInterface(_ context.Context, in *ipb.UpdateNetInterfaceRequest) (*ipb.NetInterface, error) {
+	log.Printf("UpdateNetInterface: Received from client %v", in)
+
+	return &ipb.NetInterface{}, nil
+}
+
 // GetNetInterface gets the network interface information
 func (s *Server) GetNetInterface(_ context.Context, in *ipb.GetNetInterfaceRequest) (*ipb.NetInterface, error) {
 	log.Printf("GetNetInterface: Received from client %v", in)
+
+	// check the required fields
+	if err := s.validateGetNetInterfaceRequest(in); err != nil {
+		log.Printf("GetNetInterfaces(): validation failure: %v", err)
+		return nil, err
+	}
+
 	return &ipb.NetInterface{}, nil
 }
 
@@ -145,5 +161,10 @@ func (s *Server) ListNetInterfaces(_ context.Context, in *ipb.ListNetInterfacesR
 	// check the pagination for the response
 	log.Printf("Limiting result len(%d) to [%d:%d]", len(s.Intfs), offset, size)
 
-	return &ipb.ListNetInterfacesResponse{}, nil
+	Blobarray := make([]*ipb.NetInterface, len(s.Intfs))
+	for _, Intfs := range s.Intfs {
+		Blobarray = append(Blobarray, Intfs)
+	}
+
+	return &ipb.ListNetInterfacesResponse{NetInterfaces: Blobarray}, nil
 }

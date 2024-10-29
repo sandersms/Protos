@@ -12,6 +12,7 @@ import (
 	"time"
 
 	inv "github.com/opiproject/opi-api/inventory/v1/gen/go"
+	ipb "github.com/opiproject/opi-api/network/opinetcommon/v1alpha1/gen/go"
 
 	"google.golang.org/grpc"
 )
@@ -40,8 +41,10 @@ func main() {
 	defer cxn.Close()
 
 	InvClient := inv.NewInventoryServiceClient(cxn)
+	NetClient := ipb.NewNetInterfaceServiceClient(cxn)
 
 	// Get the inventory data
+	log.Printf("Get the Inventory data from the target")
 	cntx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	rsp, err := InvClient.GetInventory(cntx, &inv.GetInventoryRequest{})
@@ -49,4 +52,20 @@ func main() {
 		log.Fatalf("error getting inventory: %v", err)
 	}
 	log.Printf("%s", rsp)
+
+	// Get the Network Interface List
+	log.Printf("Get the Network Interface List of devices")
+	cntx, cancel = context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	resp, err := NetClient.ListNetInterfaces(cntx, &ipb.ListNetInterfacesRequest{Parent: "network"})
+	if err != nil {
+		log.Fatalf("error getting interface list: %v", err)
+	}
+	for _, intf := range resp.NetInterfaces {
+		if intf.Name != "" {
+			log.Printf("%s", intf)
+		}
+	}
+//	log.Printf("%s", resp)
+
 }

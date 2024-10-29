@@ -13,6 +13,7 @@ import (
 // The Server Object
 type Server struct {
 	pb.UnimplementedInventoryServiceServer
+	ipb.UnimplementedNetInterfaceServiceServer
 	Pagination map[string]int
 	Dpus       map[string]*pb.Inventory
 	Intfs      map[string]*ipb.NetInterface

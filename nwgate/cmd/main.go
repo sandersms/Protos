@@ -10,6 +10,7 @@ import (
 	"net"
 
 	inv "github.com/opiproject/opi-api/inventory/v1/gen/go"
+	ipb "github.com/opiproject/opi-api/network/opinetcommon/v1alpha1/gen/go"
 	"github.com/sandersms/Protos/nwgate/pkg/dpudev"
 
 	"google.golang.org/grpc"
@@ -37,6 +38,7 @@ func main() {
 	dpudev.InitNetworkData(opiServ)
 
 	inv.RegisterInventoryServiceServer(grpcServer, opiServ)
+	ipb.RegisterNetInterfaceServiceServer(grpcServer, opiServ)
 	reflection.Register(grpcServer)
 
 	log.Printf("Server listening at %v", lis.Addr())
