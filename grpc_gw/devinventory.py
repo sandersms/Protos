@@ -49,6 +49,8 @@
 
 import subprocess
 import psutil
+from pylspci.command import IDResolveOption
+from pylspci.parsers import VerboseParser
 
 def get_bios_info():
     bios = dict()
@@ -94,51 +96,34 @@ def get_baseboard_info():
 def get_cpu_info():
     cpu = dict()
     cpu['total_cores'] = psutil.cpu_count(logical=False)
-#    cpu['cores'] = subprocess.check_output("dmidecode -t 4 | grep 'Core Count:' | awk '{print $3}'", universal_newlines=True, shell=True)
     cpu['total_threads'] = psutil.cpu_count()
-#    cpu['threads'] = subprocess.check_output("dmidecode -t 4 | grep 'Thread Count' | awk '{print $3}'", universal_newlines=True, shell=True)
-#    print(cpu)
     return cpu
 
 def get_memory_info():
     memory = dict()
     memory['total_physical_bytes'] = psutil.virtual_memory().total
     memory['total_usable_bytes'] = psutil.virtual_memory().available
-#    print(memory)
     return memory
 
 def get_pci_info():
-    pciout = subprocess.check_output("lspci -D -mmv -k", universal_newlines=True, shell=True)
-    devs = []
+    devices = VerboseParser().run(id_resolve_option=IDResolveOption.NameOnly)
+    pcis = []
     slot = None
-    for line in pciout.splitlines():
-        line = line.strip()
-#        print(line)
-        if slot and not line:
-            devs.append(slot)
-        else:
-            k, v = (line.split('\t'))
-        if k == "Slot:":
+    for device in devices:
+#        print(device)
+        if device:
             slot = {}
-            slot['address'] = v
-        if slot and k == "Driver:":
-            slot['driver'] = v
-        if slot and k == "Vendor:":
-            slot['vendor'] = v
-        if slot and k == "Class:":
-            slot['class'] = v
-        if slot and k == "Device:":
-            slot['product'] = v
-        if slot and k == "Rev:":
-            slot['revision'] = v
-        else:
-            slot['revision'] = "unknown"
-        if slot and k == "Subsystem:":
-            slot['subsystem'] = v
-        else:
-            slot['subsystem'] = "unknown"
-#    print(devs)
-    return devs
+            slot['address'] = f'{device.slot}'
+            slot['driver'] = f'{device.driver}'
+            slot['vendor'] = f'{device.vendor}'
+            slot['class'] = f'{device.cls}'
+            slot['product'] = f'{device.device}'
+            slot['revision'] = f'{device.revision}'
+            slot['subsystem'] = f'{device.subsystem_device}'
+            pcis.append(slot)
+#            print(slot)
+#    print(pcis)
+    return pcis
 
 def gather_device_info():
     inventory = dict()
@@ -151,7 +136,6 @@ def gather_device_info():
     inventory['memory'] = get_memory_info()
     inventory['pci'] = get_pci_info()
 
-#    print(inventory)
     return inventory
 
 if __name__ == '__main__':
