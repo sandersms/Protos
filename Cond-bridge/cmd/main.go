@@ -70,6 +70,7 @@ func runGrpcServer(grpcPort int) {
 	s := grpc.NewServer()
 
 	inventory.RegisterInventorytoGrpc(s)
+	frontend.RegisterStoragetoGrpc(s)
 	reflection.Register(s)
 
 	log.Printf("gRPC Server listening at %v", lis.Addr())
@@ -89,6 +90,7 @@ func runGatewayServer(grpcPort int, httpPort int) {
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 	endpoint := fmt.Sprintf("localhost:%d", grpcPort)
 	inventory.RegisterInventorytoGateway(ctx, mux, endpoint, opts)
+	frontend.RegisterStoragetoGateway(ctx, mux, endpoint, opts)
 	
 
 	// Start HTTP server (and proxy calls to gRPC server endpoint)

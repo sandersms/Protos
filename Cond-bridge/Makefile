@@ -1,5 +1,4 @@
 # SPDX-License-Identifier: Apache-2.0
-# Copyright (c) 2023 Dell Inc, or its subsidiaries.
 
 ROOT_DIR='.'
 PROJECTNAME=$(shell basename "$(PWD)")
