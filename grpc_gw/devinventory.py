@@ -3,48 +3,10 @@
 # License Here
 #
 # Python implementation of inventory handling
-#
-# Inventory Structure
-#    BIOSInfo
-#        vendor
-#        version
-#        date
-#    SystemInfo
-#        family
-#        name
-#        vendor
-#        serial_number
-#        uuid
-#        sku
-#        version
-#    ChassisInfo
-#        asset_tag
-#        serial_number
-#        type
-#        type_description
-#        vendor
-#        version
-#    BaseboardInfo
-#        asset_tag
-#        serial_number
-#        vendor
-#        version
-#        product
-#    CPUInfo
-#        total_cores (psutil.cpu_count)
-#        total_threads
-#    MemoryInfo
-#        total_physical_bytes
-#        total_usable_bytes
-#    PCIeDeviceInfo
-#        driver
-#        address
-#        vendor
-#        product
-#        revision
-#        subsystem
-#        class
-#        subclass
+#   To retrieve the inventory information, the user/process needs to be running as root since the "dmidecode"
+#   operation requires root level to perform the function.  Since some parameters are available from the 
+#   /sys/class/dmi/id folder as read access, those could be retrieved from there; but, some are only root
+#   privilege readable.  Using the dmidecode is more universal.
 #
 
 import subprocess
@@ -52,44 +14,53 @@ import psutil
 from pylspci.command import IDResolveOption
 from pylspci.parsers import VerboseParser
 
+def read_sysvalue(item):
+    base_cmd = "dmidecode --string "
+    dmi_cmd = base_cmd + item
+    try:
+        value = subprocess.check_output(dmi_cmd, universal_newlines=True, shell=True)
+    except:
+        value = "Not Specified"
+    return value
+
 def get_bios_info():
     bios = dict()
-    bios['vendor'] = subprocess.check_output("dmidecode --string bios-vendor", universal_newlines=True, shell=True)
-    bios['version'] = subprocess.check_output("dmidecode --string bios-version", universal_newlines=True, shell=True)
-    bios['date'] = subprocess.check_output("dmidecode --string bios-release-date", universal_newlines=True, shell=True)
+    bios['vendor'] = read_sysvalue("bios-vendor")
+    bios['version'] = read_sysvalue("bios-version")
+    bios['date'] = read_sysvalue("bios-release-date")
 #    print(bios)
     return bios
 
 def get_system_info():
     system = dict()
-    system['family'] = subprocess.check_output("dmidecode -t 1 | grep 'Family:' | awk '{print $2}'", universal_newlines=True, shell=True)
-    system['name'] = subprocess.check_output("dmidecode --string system-product-name", universal_newlines=True, shell=True)
-    system['vendor'] = subprocess.check_output("dmidecode --string system-manufacturer", universal_newlines=True, shell=True)
-    system['serial_number'] = subprocess.check_output("dmidecode --string system-serial-number", universal_newlines=True, shell=True)
-    system['uuid'] = subprocess.check_output("dmidecode --string system-uuid", universal_newlines=True, shell=True)
-    system['sku'] = subprocess.check_output("dmidecode -t 1 | grep 'SKU Number:' | awk '{print $3}'", universal_newlines=True, shell=True)
-    system['version'] = subprocess.check_output("dmidecode --string system-version", universal_newlines=True, shell=True)
+    system['family'] = read_sysvalue("system-family")
+    system['name'] = read_sysvalue("system-product-name")
+    system['vendor'] = read_sysvalue("system-manufacturer")
+    system['serial_number'] = read_sysvalue("system-serial-number")
+    system['uuid'] = read_sysvalue("system-uuid")
+    system['sku'] = read_sysvalue("system-sku-number")
+    system['version'] = read_sysvalue("system-version")
 #    print(system)
     return system
 
 def get_chassis_info():
     chassis = dict()
-    chassis['asset_tag'] = subprocess.check_output("dmidecode --string chassis-asset-tag", universal_newlines=True, shell=True)
-    chassis['serial_number'] = subprocess.check_output("dmidecode --string chassis-serial-number", universal_newlines=True, shell=True)
-    chassis['type'] = subprocess.check_output("dmidecode --string chassis-type", universal_newlines=True, shell=True)
+    chassis['asset_tag'] = read_sysvalue("chassis-asset-tag")
+    chassis['serial_number'] = read_sysvalue("chassis-serial-number")
+    chassis['type'] = read_sysvalue("chassis-type")
     chassis['type_description'] = "-------------"
-    chassis['vendor'] = subprocess.check_output("dmidecode --string chassis-manufacturer", universal_newlines=True, shell=True)
-    chassis['version'] = subprocess.check_output("dmidecode --string chassis-version", universal_newlines=True, shell=True)
+    chassis['vendor'] = read_sysvalue("chassis-manufacturer")
+    chassis['version'] = read_sysvalue("chassis-version")
 #    print(chassis)
     return chassis
 
 def get_baseboard_info():
     baseboard = dict()
-    baseboard['asset_tag'] = subprocess.check_output("dmidecode --string baseboard-asset-tag", universal_newlines=True, shell=True)
-    baseboard['serial_number'] = subprocess.check_output("dmidecode --string baseboard-serial-number", universal_newlines=True, shell=True)
-    baseboard['vendor'] = subprocess.check_output("dmidecode --string baseboard-manufacturer", universal_newlines=True, shell=True)
-    baseboard['version'] = subprocess.check_output("dmidecode --string baseboard-version", universal_newlines=True, shell=True)
-    baseboard['product'] = subprocess.check_output("dmidecode --string baseboard-product-name", universal_newlines=True, shell=True)
+    baseboard['asset_tag'] = read_sysvalue("baseboard-asset-tag")
+    baseboard['serial_number'] = read_sysvalue("baseboard-serial-number")
+    baseboard['vendor'] = read_sysvalue("baseboard-manufacturer")
+    baseboard['version'] = read_sysvalue("baseboard-version")
+    baseboard['product'] = read_sysvalue("baseboard-product-name")
 #    print(baseboard)
     return baseboard
 
@@ -110,7 +81,6 @@ def get_pci_info():
     pcis = []
     slot = None
     for device in devices:
-#        print(device)
         if device:
             slot = {}
             slot['address'] = f'{device.slot}'
@@ -121,7 +91,6 @@ def get_pci_info():
             slot['revision'] = f'{device.revision}'
             slot['subsystem'] = f'{device.subsystem_device}'
             pcis.append(slot)
-#            print(slot)
 #    print(pcis)
     return pcis
 
